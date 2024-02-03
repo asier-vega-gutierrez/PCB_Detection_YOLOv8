@@ -1,13 +1,13 @@
 from ultralytics import YOLO
 import torch
-
+import os
 
 def train_pcb():
 
     #CONFIGURACION
 
     #Cargar el modelo
-    model = YOLO("./model/original/yolov8n.pt")
+    model = YOLO("yolov8n.pt")
     #Modelo disponibles YOLOv8n < YOLOv8s < YOLOv8m < YOLOv8l < YOLOv8x
     
     #Enviar el modelo a al grafica
@@ -20,10 +20,18 @@ def train_pcb():
     #Entrenar el modelo
     model.train(data="./data/data_pcb/anotated/data.yaml", epochs=1)
   
-    #TODO hacer que no genere el archvio yolov8n.pt
-    #TODO anadir evaluacion
-    #TODO añadir gruardado
+    #GUARDADO
+
+    #Guardado del modelo en onnx
+    model.export(format='onnx')
+
+    #Borramos el modelo original usado para que no estorbe
+    os.remove("./yolov8n.pt")
+    
+
+    #TODO anadir evaluacion (model.eval ????)
     #TODO añadir crossvalidadcion
+    #TODO usar logger Comet
 
 
 if __name__ == '__main__': 
