@@ -1,8 +1,8 @@
 task: detect
 mode: train
-model: ./model/original/yolov8n.pt
+model: yolov8n.pt
 data: ./data/data_pcb/anotated/data.yaml
-epochs: 1
+epochs: 50
 time: null
 patience: 50
 batch: 16
