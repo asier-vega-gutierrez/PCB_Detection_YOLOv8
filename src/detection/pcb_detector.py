@@ -1,6 +1,5 @@
 from ultralytics import YOLO
 import torch
-import cv2
 import os
 
 class PCBDetector():

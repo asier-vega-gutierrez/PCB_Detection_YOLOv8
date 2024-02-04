@@ -6,6 +6,7 @@ from detection.pcb_detector import PCBDetector
 #    1-5 luz natural ventana
 #   6-10 luz artificila habitacion con persiana
 #   11-15 luz focalizada
+#   16-20 luz natura en otro momento
 
 #1. Detectar las placas (clasificar el modelo ya)
 #2. Segmentar las imagenes de las placas
@@ -51,7 +52,8 @@ def main():
         if key == ord('q'):
             recording = False
 
-    
+#TODO hacer las 5 anotaciones que faltan
+#TODO meter mas pcbs
 #TODO sistema de logs mas claro
     
 if __name__ == "__main__":

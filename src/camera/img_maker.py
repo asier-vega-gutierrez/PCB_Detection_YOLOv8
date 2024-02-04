@@ -1,5 +1,5 @@
 import cv2
-from camera.camera import Camera
+from camera import Camera
 
 # Función para guardar la imagen actual con un nombre único
 def guardar_imagen(frame, contador):
