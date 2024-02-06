@@ -24,7 +24,7 @@ class PCBDetector():
         #ENTRNAMINETO
 
         #Entrenar el modelo
-        self.model.train(data="./data/data_pcb/anotated/data.yaml", epochs=50)
+        self.model.train(data="./data/data_pcb/detected/data.yaml", epochs=50)
 
         #Evaluacion del modelo
         self.model.val()
@@ -47,16 +47,17 @@ class PCBDetector():
 
         #Cargar el modelo
         if self.model == None:
-            self.model = YOLO("./runs/good/train_pcb_0/weights/best.pt")
-             #Enviar el modelo a al grafica
+            self.model = YOLO("./runs/good/train_pcb_detection_0/weights/best.pt")
+            #Enviar el modelo a al grafica
             print(f"Is CUDA supported by this system? {torch.cuda.is_available()}")
             DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
             self.model.to(DEVICE)
 
         #PROCESADO
 
-        #Predecir una imagen
-        results = self.model(img)[0]
-        img = results.plot()
+        #Predecir una imagen (retina mask, para uqe devuelva mascaras para la segementacion)
+        results = self.model.predict(img, save_conf=True)
+        img = results[0].plot()
         
-        return img
+        #Devolver la imagen con la caja pintada
+        return img, results

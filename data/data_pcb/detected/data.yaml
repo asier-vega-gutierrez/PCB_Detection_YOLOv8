@@ -1,0 +1,7 @@
+path: C:\ASIER\00-Vision\U2-MachineLearning\Proyecto\data\data_pcb\detected\
+
+train: ../train/images
+val: ../val/images
+
+nc: 4
+names: ['arduino_mega','esp32','l298n','uln2003']

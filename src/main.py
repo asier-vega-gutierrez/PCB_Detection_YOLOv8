@@ -1,6 +1,8 @@
 import cv2
+import numpy as np
 from camera.camera import Camera
-from detection.pcb_detector import PCBDetector
+from segmentation.pcb_segmentor import PCBSegmentor
+from common.common import rescale_image
 
 #0. generacion de fotos:
 #    1-5 luz natural ventana
@@ -8,7 +10,7 @@ from detection.pcb_detector import PCBDetector
 #   11-15 luz focalizada
 #   16-20 luz natura en otro momento
 
-#1. Detectar las placas (clasificar el modelo ya)
+#1. Segementar las placas
 #2. Segmentar las imagenes de las placas
 #3. Detectar los componenetes
 #4. Evaluar cuanto de bien esta la placa
@@ -18,41 +20,64 @@ from detection.pcb_detector import PCBDetector
 
 def main():
 
-    #VARIBLES
+    #VARIABLES
 
-    #Parametor para la grabacion
+    #Parametros para la grabacion
     my_camera = Camera(hw_id=0, w=1280, h=720)
     #Modelos de deteccion
-    pcb_detector = PCBDetector(trained = True)
-    if pcb_detector.trained == False:
-        pcb_detector.train()
-    
+    pcb_segmentor = PCBSegmentor(trained = True)
+    if pcb_segmentor.trained == False:
+        pcb_segmentor.train()
+
 
     #PROCESADO
 
-    #Flujo de striming de imagenes se controla atraves de la variable recording, por otro lado se peude para la ejecucion si la tecla "P" se mantiene pulsada
+    #Flujo de streaming de imagenes se controla atraves de la variable recording
     frame, succes = my_camera.get_frame()
     recording = True
     while recording == True and succes == True:
+
+        segmented_pcbs = []
 
         #ADQUSICION
 
         #Recupera el frame de la camara
         frame, succes = my_camera.get_frame()
+        h, w, _ = frame.shape
 
         #DETECCION
 
-        frame = pcb_detector.run(frame)
-        cv2.imshow('Result', frame)
-        
+        #Procesar el frame detectado por el segmentador de PCBs
+        frame_pcb_detection, results_pcb = pcb_segmentor.run(frame)
+        #Iteramos por los resultados
+        for result in results_pcb:
+            if result.masks is not None:
+                for mask in result.masks.data:
+                    #Precesmos pl amsrcara para pdoer usarla
+                    mask =  mask.detach().cpu().numpy() * 255
+                    #La ajustamos a la imagen del frame
+                    mask = cv2.resize(mask, (w, h))
+                    #Aplicamos la mascara
+                    frame_pcb_segmented = cv2.bitwise_and(frame, frame, mask=mask.astype(np.uint8))
+                    #Añadrimos las pcbs detectadas
+                    segmented_pcbs.append(frame_pcb_segmented)
 
+
+
+        #VISUALIZADO
+        
+        #Ensenar por pantana las distintas imagenes
+        cv2.imshow('Result', frame_pcb_detection)
+        if len(segmented_pcbs) > 0:
+            cv2.imshow('Segmented_0', segmented_pcbs[0])
+        
         #Espera a que se presione una tecla
         key = cv2.waitKey(1) & 0xFF
         #Si la tecla presionada es "q" se termina la grabacion
         if key == ord('q'):
             recording = False
+            cv2.destroyWindow()
 
-#TODO hacer las 5 anotaciones que faltan
 #TODO meter mas pcbs
 #TODO sistema de logs mas claro
     
