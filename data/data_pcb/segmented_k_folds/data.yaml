@@ -1,0 +1,12 @@
+path: C:\ASIER\00-Vision\U2-MachineLearning\Proyecto\data\data_pcb\segmented\
+
+train: ../images/train
+val: ../images/val
+
+nc: 4
+#names: ['arduino_mega','esp32','l298n','uln2003']
+names:
+  0: arduino_mega
+  1: esp32
+  2: l298n
+  3: uln2003

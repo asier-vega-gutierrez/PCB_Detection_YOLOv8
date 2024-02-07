@@ -1,0 +1,8 @@
+names:
+  0: arduino_mega
+  1: esp32
+  2: l298n
+  3: uln2003
+path: C:/ASIER/00-Vision/U2-MachineLearning/Proyecto/data/data_pcb/segmented_k_folds/Fold_Cross_val/split_1/
+train: train
+val: val

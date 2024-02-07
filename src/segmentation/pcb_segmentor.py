@@ -1,6 +1,9 @@
 from ultralytics import YOLO
 import torch
 import os
+from pathlib import Path
+import json
+
 
 class PCBSegmentor():
 
@@ -21,10 +24,25 @@ class PCBSegmentor():
         DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model.to(DEVICE)
 
+        #Cargar los datos
+        ds_yamls = []
+        save_path = Path('./data/data_pcb/segmented_k_folds/Fold_Cross_val')
+        for split in ['split_1', 'split_2', 'split_3']:
+            split_dir = save_path / split
+            dataset_yaml = split_dir / f'{split}_dataset.yaml'
+            ds_yamls.append(dataset_yaml)
+
         #ENTRNAMINETO
 
         #Entrenar el modelo
-        self.model.train(data="./data/data_pcb/segmented/data.yaml", epochs=50)
+        #self.model.train(data="./data/data_pcb/segmented/data.yaml", epochs=50)
+        batch = 16
+        epochs = 10
+        results = {}
+        for k in range(3):
+            dataset_yaml = ds_yamls[k]
+            self.model.train(data=dataset_yaml, epochs=epochs, batch=batch)
+            results[k] = self.model.metrics
 
         #Evaluacion del modelo
         self.model.val()
@@ -38,9 +56,6 @@ class PCBSegmentor():
         os.remove("./yolov8n-seg.pt")
         os.remove("./yolov8n.pt")
         
-
-        #TODO añadir crossvalidadcion https://docs.ultralytics.com/guides/kfold-cross-validation/
-        #TODO usar logger Comet
     
     def run(self, img):
 
@@ -48,6 +63,9 @@ class PCBSegmentor():
 
         #Cargar el modelo
         if self.model == None:
+            print("Model is none loading the saved one")
+            #"./runs/good/train_pcb_segmentation_0/weights/best.pt"
+            #"./runs/good/train_pcb_segmentation_k_fold_0/train22/weights/best.pt"
             self.model = YOLO("./runs/good/train_pcb_segmentation_0/weights/best.pt")
             #Enviar el modelo a al grafica
             print(f"Is CUDA supported by this system? {torch.cuda.is_available()}")
@@ -57,10 +75,8 @@ class PCBSegmentor():
         #PROCESADO
 
         #Predecir una imagen (retina mask, para uqe devuelva mascaras para la segementacion)
-        results = self.model.predict(img, save_conf=True, save=True)
+        results = self.model.predict(img, save_conf=True)
         img = results[0].plot()
-
-        #TODO stream = true, mirar com funciona y si eso implemntar
         
         #Devolver la imagen con la caja pintada
         return img, results

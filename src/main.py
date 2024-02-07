@@ -37,7 +37,8 @@ def main():
     recording = True
     while recording == True and succes == True:
 
-        segmented_pcbs = []
+        img_segmented_pcbs = []
+        data_pcb = []
 
         #ADQUSICION
 
@@ -45,12 +46,14 @@ def main():
         frame, succes = my_camera.get_frame()
         h, w, _ = frame.shape
 
-        #DETECCION
+        #SEGMENTACION
 
         #Procesar el frame detectado por el segmentador de PCBs
         frame_pcb_detection, results_pcb = pcb_segmentor.run(frame)
+    
         #Iteramos por los resultados
         for result in results_pcb:
+            #Segemntado de la imagen
             if result.masks is not None:
                 for mask in result.masks.data:
                     #Precesmos pl amsrcara para pdoer usarla
@@ -60,16 +63,20 @@ def main():
                     #Aplicamos la mascara
                     frame_pcb_segmented = cv2.bitwise_and(frame, frame, mask=mask.astype(np.uint8))
                     #Añadrimos las pcbs detectadas
-                    segmented_pcbs.append(frame_pcb_segmented)
-
-
+                    img_segmented_pcbs.append(frame_pcb_segmented)
+            #df = result.pandas().xyxy[0]
+            #for i in df['name']: # name->labels
+                #dict = {'Label': , 'Position':, }
+                #data_pcb.append(dict)
+        
+        #DETECCION
 
         #VISUALIZADO
         
         #Ensenar por pantana las distintas imagenes
         cv2.imshow('Result', frame_pcb_detection)
-        if len(segmented_pcbs) > 0:
-            cv2.imshow('Segmented_0', segmented_pcbs[0])
+        if len(img_segmented_pcbs) > 0:
+            cv2.imshow('Segmented_0', img_segmented_pcbs[0])
         
         #Espera a que se presione una tecla
         key = cv2.waitKey(1) & 0xFF
@@ -78,8 +85,9 @@ def main():
             recording = False
             cv2.destroyWindow()
 
-#TODO meter mas pcbs
 #TODO sistema de logs mas claro
+#TODO usar logger Comet
+#TODO stream = true, mirar com funciona y si eso implemntar, self.model.predict
     
 if __name__ == "__main__":
     main()
