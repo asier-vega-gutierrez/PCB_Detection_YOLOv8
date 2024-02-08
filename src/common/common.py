@@ -15,3 +15,13 @@ def rescale_image(img, scale_percent):
     resized_image = cv2.resize(img, (new_width, new_height))
 
     return resized_image
+
+def is_inside_box(big_box, small_box):
+    x1_big, y1_big, x2_big, y2_big = big_box
+    
+    x1_small, y1_small, x2_small, y2_small = small_box
+    if (x1_big <= x1_small and y1_big <= y1_small and
+        x2_big >= x2_small and y2_big >= y2_small):
+        return True
+    
+    return False
