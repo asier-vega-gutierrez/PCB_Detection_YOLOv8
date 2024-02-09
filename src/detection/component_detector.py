@@ -32,7 +32,7 @@ class ComponentDetector():
             #ENTRNAMINETO
 
             #Entrenar el modelo
-            self.model.train(data="./data/data_components/detected/data.yaml", epochs=200)
+            self.model.train(data="./data/data_components/detected_0/data.yaml", epochs=50)
             
         else:
 
@@ -44,7 +44,7 @@ class ComponentDetector():
                 dataset_yaml = split_dir / f'{split}_dataset.yaml'
                 ds_yamls.append(dataset_yaml)
 
-            #ENTRNAMINETO
+            #ENTRNAMIENTO
 
             #Entrenar el modelo
             batch = 16

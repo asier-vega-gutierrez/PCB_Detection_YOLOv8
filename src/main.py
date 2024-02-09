@@ -3,20 +3,10 @@ import numpy as np
 from camera.camera import Camera
 from segmentation.pcb_segmentor import PCBSegmentor
 from detection.component_detector import ComponentDetector
+from screen.display_3x3 import display3x3
 from common.common import is_inside_box
-
-#0. generacion de fotos:
-#    1-5 luz natural ventana
-#   6-10 luz artificila habitacion con persiana
-#   11-15 luz focalizada
-#   16-20 luz natura en otro momento
-
-#1. Segementar las placas
-#2. Segmentar las imagenes de las placas
-#3. Detectar los componenetes
-#4. Evaluar cuanto de bien esta la placa
-
-
+from common.common import count_occurrences
+from static.constants import Constants
 
 
 def main():
@@ -33,6 +23,8 @@ def main():
     component_detector = ComponentDetector(trained = True)
     if component_detector.trained == False:
         component_detector.train()
+    #Constantes
+    const = Constants()
 
     #PROCESADO
 
@@ -80,7 +72,7 @@ def main():
             #Extraccion de la informacion
             for box in result.boxes:
                 #Extraermos la label y la caja
-                dict = {'Label': int(box.cls[0].tolist()), 'Box':box.xyxy[0].tolist(), 'Components': []}
+                dict = {'Label': int(box.cls[0].tolist()), 'Box':box.xyxy[0].tolist(), 'Components': [], 'Accuracy': 0.0, 'Accuracy_by_component': []}
                 #Añadimos los resultados a la lista
                 data_segmented_pcb.append(dict)
         
@@ -115,14 +107,54 @@ def main():
                 seen.add(t)
                 data_full_pcbs.append(d)
 
+        #RESULTADOS
+                
+        #Iterar por cada pcb detectada
+        if len(data_full_pcbs) > 0:
+            for id_pcb, pcb in enumerate(data_full_pcbs):
+                #Sabiendo en que pcb trabajamos
+                if pcb['Label'] == 0:
+                    general_acuracy_100 = const.ARDUINO_MEGA_COUNT
+                elif pcb['Label'] == 1:
+                    general_acuracy_100 = const.ESP32_COUNT
+                elif pcb['Label'] == 2:
+                    general_acuracy_100 = const.L298N_COUNT
+                elif pcb['Label'] == 3:
+                    general_acuracy_100 = const.ULN2003_COUNT
+                #Alamcenar los compoenentes detectados de la pcb
+                actual_components = []
+                for component in pcb['Components']:
+                    actual_components.append(component['Label'])
+                #Precicsion general: numero de conponentes totaltes
+                count_components = len(actual_components)
+                pcb['Accuracy'] = count_components / general_acuracy_100
+                #Precision de componeente: numero de componentes de cada tipo
+                occurrence_components = count_occurrences(actual_components)
+                pcb['Accuracy_by_component'] = occurrence_components
+                #Añadimos los datos a la lsita principal
+                data_full_pcbs[id_pcb] = pcb         
+
         #VISUALIZADO
         
-        #Ensenar por pantalla las distintas imagenes
-        cv2.imshow('Result', img_segmented_pcb)
+        #Pintamos la infromacion por pantalla
+        display3x3('Actual Frame', frame, 1)
+        display3x3('Segemented pcbs', img_segmented_pcb, 2)
         if len(img_segmented_pcbs) > 0:
-            cv2.imshow('Segmented_0', img_segmented_pcbs[0])
+            id = 4
+            for img_pcb in img_segmented_pcbs:
+                display3x3('Pcb no backgorund' + str(id-4) , img_pcb, id)
+                id = id + 1
+                if id > 6:
+                    break
         if len(img_detected_components) > 0:
-            cv2.imshow('Result_1', img_detected_components[0])
+            id = 7
+            for img_pcb in img_detected_components:
+                display3x3('Pcb no backgorund' + str(id-4) , img_pcb, id)
+                id = id + 1
+                if id > 9:
+                    break
+        #TODO En la ultima iamgen añadir la precision y los componenetes actual/real
+        #TODO Arreglar lo de que si meto la no se genrean mas ventanas
         
         #Espera a que se presione una tecla
         key = cv2.waitKey(1) & 0xFF
@@ -130,10 +162,6 @@ def main():
         if key == ord('q'):
             recording = False
             cv2.destroyWindow()
-
-#TODO sistema de logs mas claro
-#TODO usar logger Comet
-#TODO stream = true, mirar com funciona y si eso implemntar, self.model.predict
     
 if __name__ == "__main__":
     main()

@@ -25,3 +25,13 @@ def is_inside_box(big_box, small_box):
         return True
     
     return False
+
+"""Metodo para cotar el numero de numeros de una lista"""
+def count_occurrences(lst):
+    counts = {}
+    for num in lst:
+        if num in counts:
+            counts[num] += 1
+        else:
+            counts[num] = 1
+    return counts
