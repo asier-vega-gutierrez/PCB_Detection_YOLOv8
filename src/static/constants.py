@@ -1,4 +1,5 @@
 
+"""Clase con todas las constantes"""
 class Constants:
     
     def __init__(self) -> None:
@@ -16,11 +17,11 @@ class Constants:
         self.ULN2003_COUNT = 13
         
         #Constantes de componentes
-        self.IC = 0
-        self.LED = 1
-        self.BATTERY = 2
-        self.BUZZER = 3
-        self.CAPACITOR = 4
+        self.IC = 0 #
+        self.LED = 1 #
+        self.BATTERY = 2 #
+        self.BUZZER = 3 #
+        self.CAPACITOR = 4 
         self.CLOCK = 5
         self.CONNECTOR = 6
         self.DIODE = 7
@@ -34,8 +35,8 @@ class Constants:
         self.TRANSISTOR = 15
 
         #Constantes de componentes por pcb
-        self.ARDUINO_MEGA_COMPONENTS = {self.SWITCH: 1, self.CAPACITOR: 19, self.CLOCK: 2, self.CONNECTOR: 12, self.DIODE: 2, self.FUSE: 1, self.IC: 7, self.LED: 4, self.RESISTOR: 11}
-        self.ESP32_COMPONENTS = {self.RESISTOR: 10, self.IC: 6, self.LED: 1, self.CAPACITOR: 6, self.CONNECTOR: 3, self.DIODE: 1}
+        self.ARDUINO_MEGA_COMPONENTS = {self.SWITCH: 1, self.CAPACITOR: 14, self.CLOCK: 2, self.CONNECTOR: 12, self.DIODE: 2, self.FUSE: 1, self.IC: 7, self.LED: 4, self.RESISTOR: 11}
+        self.ESP32_COMPONENTS = {self.RESISTOR: 10, self.IC: 6, self.LED: 1, self.CAPACITOR: 7, self.CONNECTOR: 3, self.DIODE: 1}
         self.L298N = {self.IC: 2, self.LED: 1, self.CAPACITOR: 2, self.RESISTOR: 1, self.DIODE: 8, self.CONNECTOR: 7}
         self.ULN2003 = {self.IC: 1, self.CONNECTOR: 3, self.RESISTOR: 4, self.LED: 4, self.CAPACITOR: 1}
 

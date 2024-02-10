@@ -2,12 +2,14 @@ from ultralytics import YOLO
 import torch
 import os
 
+'''Clase para detectar pcbs'''
 class PCBDetector():
 
     def __init__(self, trained) -> None:
         self.model = None
         self.trained = trained
 
+    '''Metodo de entrenamiento del modelo'''
     def train(self):
 
         #CONFIGURACION
@@ -41,6 +43,7 @@ class PCBDetector():
         #TODO añadir crossvalidadcion https://docs.ultralytics.com/guides/kfold-cross-validation/
         #TODO usar logger Comet
     
+    '''Metodo para ejecutar el modelo'''
     def run(self, img):
 
         #CONFIGURACION

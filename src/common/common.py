@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
 
-   
+
+'''Metodo para rescalar imagenes'''
 def rescale_image(img, scale_percent):
 
     # Get the original width and height
@@ -16,6 +17,7 @@ def rescale_image(img, scale_percent):
 
     return resized_image
 
+'''Metodo para sber si una box esta dentor de otra'''
 def is_inside_box(big_box, small_box):
     x1_big, y1_big, x2_big, y2_big = big_box
     
@@ -26,7 +28,7 @@ def is_inside_box(big_box, small_box):
     
     return False
 
-"""Metodo para cotar el numero de numeros de una lista"""
+'''Metodo para contar el numero de numeros de una lista'''
 def count_occurrences(lst):
     counts = {}
     for num in lst:

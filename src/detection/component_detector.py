@@ -4,13 +4,14 @@ import os
 from pathlib import Path
 import json
 
-
+'''Clase para detectar componentes'''
 class ComponentDetector():
 
     def __init__(self, trained) -> None:
         self.model = None
         self.trained = trained
 
+    '''Metodo de entrenamiento del modelo'''
     def train(self):
 
         #CONFIGURACION
@@ -66,7 +67,7 @@ class ComponentDetector():
         #Borramos el modelo original usado para que no estorbe
         os.remove("./yolov8n.pt")
         
-    
+    '''Metodo para ejecutar el modelo'''
     def run(self, img):
 
         #CONFIGURACION

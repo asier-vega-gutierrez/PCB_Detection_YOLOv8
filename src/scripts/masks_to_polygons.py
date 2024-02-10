@@ -1,7 +1,7 @@
 import os
-
 import cv2
 
+'''Esto es para convertir los datos si vamos a segmentar'''
 
 input_dir = './data/data_pcb/segmented/masks'
 output_dir = './data/data_pcb/segmented/labels'

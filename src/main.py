@@ -138,23 +138,12 @@ def main():
         
         #Pintamos la infromacion por pantalla
         display3x3('Actual Frame', frame, 1)
-        display3x3('Segemented pcbs', img_segmented_pcb, 2)
+        display3x3('Segemented pcbs', img_segmented_pcb, 4)
         if len(img_segmented_pcbs) > 0:
-            id = 4
-            for img_pcb in img_segmented_pcbs:
-                display3x3('Pcb no backgorund' + str(id-4) , img_pcb, id)
-                id = id + 1
-                if id > 6:
-                    break
+            display3x3('Pcb no backgorund' , img_segmented_pcbs[0], 5)
         if len(img_detected_components) > 0:
-            id = 7
-            for img_pcb in img_detected_components:
-                display3x3('Pcb no backgorund' + str(id-4) , img_pcb, id)
-                id = id + 1
-                if id > 9:
-                    break
-        #TODO En la ultima iamgen añadir la precision y los componenetes actual/real
-        #TODO Arreglar lo de que si meto la no se genrean mas ventanas
+            cv2.putText(img_detected_components[0], "Genal precision: "+ str(round(data_full_pcbs[0]['Accuracy'], 2)), (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            display3x3('Pcb components' , img_detected_components[0], 7)
         
         #Espera a que se presione una tecla
         key = cv2.waitKey(1) & 0xFF

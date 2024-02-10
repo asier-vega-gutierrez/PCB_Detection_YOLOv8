@@ -4,13 +4,14 @@ import os
 from pathlib import Path
 import json
 
-
+'''Clase para segmentar pcbs'''
 class PCBSegmentor():
 
     def __init__(self, trained) -> None:
         self.model = None
         self.trained = trained
 
+    '''Metodo de entrenamiento del modelo'''
     def train(self):
 
         #CONFIGURACION
@@ -67,7 +68,7 @@ class PCBSegmentor():
         os.remove("./yolov8n-seg.pt")
         os.remove("./yolov8n.pt")
         
-    
+    '''Metodo para ejecutar el modelo'''
     def run(self, img):
 
         #CONFIGURACION

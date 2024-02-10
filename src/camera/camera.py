@@ -2,7 +2,7 @@ import cv2
 import pickle
 from typing import Dict, Any
 
-
+'''Clase para menjar una camara usb'''
 class Camera:
     '''Se necesita el id que windows da a la camara, la velocidad de grabado, y la resolucion de la camara'''
     def __init__(self, hw_id: int, w: int, h: int):
