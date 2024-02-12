@@ -45,7 +45,7 @@ def component_accuracy(dict1, dict2):
         if component in dict2:
             quantity1 = dict1[component]
             quantity2 = dict2[component]
-            accuracy = ((quantity1 - quantity2) / quantity2) * 100
+            accuracy = (quantity1 / quantity2)
             component_name = id_to_name(component, True)
             component_accuracies[component_name] = "{:.2f}".format(abs(accuracy))
     return component_accuracies

@@ -135,8 +135,8 @@ def main():
                 pcb['Accuracy'] = count_components / general_acuracy_100
                 #Precision de componente: numero de componentes de cada tipo
                 occurrence_components = count_occurrences(actual_components)
-                print(component_accuracy(occurrence_components, actual_labels))
-                pcb['Accuracy_by_component'] = component_accuracy(actual_labels, occurrence_components)
+                print(component_accuracy(actual_labels, occurrence_components))
+                pcb['Accuracy_by_component'] = component_accuracy(occurrence_components, actual_labels)
                 #Añadimos los datos a la lsita principal
                 data_full_pcbs[id_pcb] = pcb         
 
@@ -148,7 +148,7 @@ def main():
         if len(img_segmented_pcbs) > 0:
             display3x3('Pcb no backgorund' , img_segmented_pcbs[0], 5)
         if len(img_detected_components) > 0:
-            cv2.putText(img_detected_components[0], "Genal precision: "+ str(round(data_full_pcbs[0]['Accuracy'], 2)), (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            cv2.putText(img_detected_components[0], "General precision: "+ str(round(data_full_pcbs[0]['Accuracy'], 2)), (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
             cv2.putText(img_detected_components[0], "Component precision: "+ str(data_full_pcbs[0]['Accuracy_by_component']), (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             display3x3('Pcb components' , img_detected_components[0], 7)
         
@@ -157,7 +157,7 @@ def main():
         #Si la tecla presionada es "q" se termina la grabacion
         if key == ord('q'):
             recording = False
-            cv2.destroyWindow(0)
+            cv2.destroyAllWindows()
     
 if __name__ == "__main__":
     main()
