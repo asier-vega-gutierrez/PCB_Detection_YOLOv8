@@ -1,0 +1,7 @@
+path: C:\ASIER\00-Vision\U2-MachineLearning\Proyecto\data\data_pbc_components\detected\
+
+train: ../train/images
+val: ../val/images
+
+nc: 16
+names: ['IC', 'LED', 'battery', 'buzzer', 'capacitor', 'clock', 'connector', 'diode', 'display', 'fuse', 'inductor', 'potentiometer', 'relay', 'resistor', 'switch', 'transistor']

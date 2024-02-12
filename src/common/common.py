@@ -37,3 +37,64 @@ def count_occurrences(lst):
         else:
             counts[num] = 1
     return counts
+
+'''Metodo para sacar la precision de cada componente'''
+def component_accuracy(dict1, dict2):
+    component_accuracies = {}
+    for component in dict1:
+        if component in dict2:
+            quantity1 = dict1[component]
+            quantity2 = dict2[component]
+            accuracy = ((quantity1 - quantity2) / quantity2) * 100
+            component_name = id_to_name(component, True)
+            component_accuracies[component_name] = "{:.2f}".format(abs(accuracy))
+    return component_accuracies
+
+'''Metodo para cabiar de id a string'''
+def id_to_name(id, component):
+    if component == False:
+        if id == 0:
+            return 'ARDUINO_MEGA'
+        elif id == 1:
+            return 'ESP32'
+        elif id == 2:
+            return 'L298N'
+        elif id == 3:
+            return 'ULN2003'
+        else:
+            return None
+    else:
+        if id == 0:
+            return 'IC'
+        elif id == 1:
+            return 'LED'
+        elif id == 2:
+            return 'BATTERY'
+        elif id == 3:
+            return 'BUZZER'
+        elif id == 4:
+            return 'CAPACITOR'
+        elif id == 5:
+            return 'CLOCK'
+        elif id == 6:
+            return 'CONNECTOR'
+        elif id == 7:
+            return 'DIODE'
+        elif id == 8:
+            return 'DISPLAY'
+        elif id == 9:
+            return 'FUSE'
+        elif id == 10:
+            return 'INDUCTOR'
+        elif id == 11:
+            return 'POTENTIOMETER'
+        elif id == 12:
+            return 'RELAY'
+        elif id == 13:
+            return 'RESISTOR'
+        elif id == 14:
+            return 'SWITCH'
+        elif id == 15:
+            return 'TRANSISTOR'
+        else:
+            return None

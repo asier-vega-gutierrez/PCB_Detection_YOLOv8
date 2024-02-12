@@ -6,6 +6,7 @@ from detection.component_detector import ComponentDetector
 from screen.display_3x3 import display3x3
 from common.common import is_inside_box
 from common.common import count_occurrences
+from common.common import component_accuracy
 from static.constants import Constants
 
 
@@ -115,12 +116,16 @@ def main():
                 #Sabiendo en que pcb trabajamos
                 if pcb['Label'] == 0:
                     general_acuracy_100 = const.ARDUINO_MEGA_COUNT
+                    actual_labels = const.ARDUINO_MEGA_COMPONENTS
                 elif pcb['Label'] == 1:
                     general_acuracy_100 = const.ESP32_COUNT
+                    actual_labels = const.ESP32_COMPONENTS
                 elif pcb['Label'] == 2:
                     general_acuracy_100 = const.L298N_COUNT
+                    actual_labels = const.L298N_COMPONENTS
                 elif pcb['Label'] == 3:
                     general_acuracy_100 = const.ULN2003_COUNT
+                    actual_labels = const.ULN2003_COMPONENTS
                 #Alamcenar los compoenentes detectados de la pcb
                 actual_components = []
                 for component in pcb['Components']:
@@ -128,21 +133,23 @@ def main():
                 #Precicsion general: numero de conponentes totaltes
                 count_components = len(actual_components)
                 pcb['Accuracy'] = count_components / general_acuracy_100
-                #Precision de componeente: numero de componentes de cada tipo
+                #Precision de componente: numero de componentes de cada tipo
                 occurrence_components = count_occurrences(actual_components)
-                pcb['Accuracy_by_component'] = occurrence_components
+                print(component_accuracy(occurrence_components, actual_labels))
+                pcb['Accuracy_by_component'] = component_accuracy(actual_labels, occurrence_components)
                 #Añadimos los datos a la lsita principal
                 data_full_pcbs[id_pcb] = pcb         
 
         #VISUALIZADO
         
-        #Pintamos la infromacion por pantalla
+        #Pintamos la informacion por pantalla
         display3x3('Actual Frame', frame, 1)
         display3x3('Segemented pcbs', img_segmented_pcb, 4)
         if len(img_segmented_pcbs) > 0:
             display3x3('Pcb no backgorund' , img_segmented_pcbs[0], 5)
         if len(img_detected_components) > 0:
             cv2.putText(img_detected_components[0], "Genal precision: "+ str(round(data_full_pcbs[0]['Accuracy'], 2)), (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            cv2.putText(img_detected_components[0], "Component precision: "+ str(data_full_pcbs[0]['Accuracy_by_component']), (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             display3x3('Pcb components' , img_detected_components[0], 7)
         
         #Espera a que se presione una tecla
@@ -150,7 +157,7 @@ def main():
         #Si la tecla presionada es "q" se termina la grabacion
         if key == ord('q'):
             recording = False
-            cv2.destroyWindow()
+            cv2.destroyWindow(0)
     
 if __name__ == "__main__":
     main()

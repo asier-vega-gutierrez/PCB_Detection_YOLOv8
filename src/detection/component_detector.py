@@ -33,7 +33,7 @@ class ComponentDetector():
             #ENTRNAMINETO
 
             #Entrenar el modelo
-            self.model.train(data="./data/data_components/detected_0/data.yaml", epochs=50)
+            self.model.train(data="./data/data_pbc_components/detected/data.yaml", epochs=200)
             
         else:
 
@@ -75,7 +75,7 @@ class ComponentDetector():
         #Cargar el modelo
         if self.model == None:
             print("Model is none loading the saved one")
-            self.model = YOLO("./runs/good/train_component_detection_0/weights/best.pt")
+            self.model = YOLO("./runs/good/train_component_detection_200/weights/best.pt")
             #Enviar el modelo a al grafica
             print(f"Is CUDA supported by this system? {torch.cuda.is_available()}")
             DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
