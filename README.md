@@ -7,4 +7,4 @@
     <li>Imagen resumen:</li>
 </ul>
 
-![foto](https://github.com/asier-vega-gutierrez/Vision_Guided_Toy/blob/main/doc/ImagenProceso.png)
+![foto](https://github.com/asier-vega-gutierrez/PCB_Detection_YOLOv8/blob/main/doc/ImagenProceso.png)
